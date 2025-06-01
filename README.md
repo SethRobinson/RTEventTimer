@@ -19,7 +19,7 @@ A modern, always-on-top countdown timer application for Windows with transparent
 
 ## Quick Start (For End Users)
 
-1. Download [`RTEventTimer_Windows.zip`](RTEventTimer_Windows.zip) (codesigned by Robinson Technologies)
+1. Download [`RTEventTimer_Windows.zip`](https://github.com/SethRobinson/RTEventTimer/raw/main/RTEventTimer_Windows.zip) (codesigned by Robinson Technologies)
 2. Extract the ZIP file to a folder
 3. Double-click `RTEventTimer.exe` to run
 4. No installation required!
