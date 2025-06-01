@@ -8,7 +8,7 @@ echo.
 :: Set variables
 set PROJECT_NAME=RTEventTimer
 set OUTPUT_DIR=publish
-set ZIP_NAME=RTEventTimer_v1.0.0.zip
+set ZIP_NAME=RTEventTimerLatest.zip
 
 :: Clean previous builds
 echo Cleaning previous builds...
