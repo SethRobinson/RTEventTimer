@@ -5,12 +5,35 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    
+    <!-- Single file deployment settings -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishTrimmed>false</PublishTrimmed>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    
+    <!-- Application metadata -->
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+    <AssemblyName>RTEventTimer</AssemblyName>
+    <Product>RTEventTimer</Product>
+    <Company>Your Company</Company>
+    <Copyright>Copyright © 2024</Copyright>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+  <!-- Release build specific settings -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <GenerateDebugInformation>false</GenerateDebugInformation>
+    <Optimize>true</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="Assets\*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <!-- Embed assets as resources instead of copying to output -->
+    <Resource Include="Assets\**\*" />
   </ItemGroup>
 
 </Project> 

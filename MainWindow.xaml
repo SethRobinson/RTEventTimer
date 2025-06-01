@@ -14,7 +14,7 @@
     <Grid>
         <!-- Background Image with True Transparency -->
         <Image Name="BackgroundImage"
-               Source="pack://siteoforigin:,,,/Assets/background.png" 
+               Source="pack://application:,,,/Assets/background.png" 
                Stretch="None"/>
         
         <!-- Main Content -->

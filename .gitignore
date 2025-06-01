@@ -384,6 +384,9 @@ $RECYCLE.BIN/
 # JetBrains Rider
 *.sln.iml
 
+# RTEventTimer build output
+RTEventTimer_v*.zip
+
 # macOS
 .DS_Store
 .AppleDouble
