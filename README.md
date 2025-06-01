@@ -2,6 +2,8 @@
 
 A modern, always-on-top countdown timer application for Windows with transparent background support, designed for use in mahjong parlors or any environment requiring a highly visible countdown display.
 
+<a href="Assets/screenshot.png"><img src="Assets/screenshot.png" width="400" alt="RTEventTimer Screenshot"></a>
+
 ## Features
 
 - **Large Digital Clock**: Displays countdown accurate to tenths of a second
@@ -12,11 +14,12 @@ A modern, always-on-top countdown timer application for Windows with transparent
 - **Audio Alert**: Plays sound when timer reaches zero
 - **Visual Alert**: Flashing animation when timer completes
 - **Customizable Assets**: Easily replace sounds and background image and adjust the text positions to match.
+- **Adjustable**: You can freely reposition by dragging it, and resize by using the scale handle on the bottom right.
 
 
 ## Quick Start (For End Users)
 
-1. Download `RTEventTimerLatest.zip`
+1. Download [`RTEventTimer_Windows.zip`](RTEventTimer_Windows.zip) (codesigned by Robinson Technologies)
 2. Extract the ZIP file to a folder
 3. Double-click `RTEventTimer.exe` to run
 4. No installation required!
@@ -65,7 +68,7 @@ This will:
 - Build a self-contained single executable
 - Sign the executable (requires signing environment)
 - Package everything into a ZIP file
-- Output: `RTEventTimerLatest.zip`
+- Output: `RTEventTimer_Windows.zip`
 
 
 ## License
