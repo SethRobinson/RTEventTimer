@@ -36,6 +36,9 @@ namespace RTEventTimer
                 ActiveText = TimerDefaults.ActiveTimerText;
             if (string.IsNullOrEmpty(FinishedText))
                 FinishedText = TimerDefaults.FinishedTimerText;
+                
+            // Handle window closing to save settings
+            this.Closing += Window_Closing;
         }
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -162,6 +165,13 @@ namespace RTEventTimer
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             PlayButtonSound?.Invoke();
+            
+            // Validate and save settings before closing
+            if (ValidateAndUpdateSettings())
+            {
+                SettingsChanged?.Invoke(this, new SettingsChangedEventArgs(TimerAction.None));
+            }
+            
             Close();
         }
 
@@ -247,6 +257,23 @@ namespace RTEventTimer
             TextFontSize = textFontSize;
 
             return true;
+        }
+
+        private void Window_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Only validate and save if not already handled by Close button
+            // Check if the settings have changed by comparing with the textbox values
+            bool hasChanges = false;
+            
+            if (ActiveTextBox != null && ActiveTextBox.Text != ActiveText)
+                hasChanges = true;
+            if (FinishedTextBox != null && FinishedTextBox.Text != FinishedText)
+                hasChanges = true;
+            
+            if (hasChanges && ValidateAndUpdateSettings())
+            {
+                SettingsChanged?.Invoke(this, new SettingsChangedEventArgs(TimerAction.None));
+            }
         }
     }
 

@@ -3,7 +3,7 @@
 CountdownMinutes=0
 CountdownSeconds=4
 ActiveText=Round 1 in progress
-FinishedText=Time's Up!
+FinishedText=Time's up, finish the hand!
 
 # Display Settings - Clock
 ClockX=0
@@ -13,4 +13,4 @@ ClockFontSize=260
 # Display Settings - Status Text
 TextX=100
 TextY=380
-TextFontSize=80
+TextFontSize=70

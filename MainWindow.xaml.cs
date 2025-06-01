@@ -18,6 +18,7 @@ namespace RTEventTimer
         private TimeSpan remainingTime;
         private bool isRunning;
         private bool isPaused;
+        private bool hasFinished;  // Track if timer has completed
         private SoundPlayer soundPlayer;
         private SoundPlayer buttonSoundPlayer;
         private Storyboard flashStoryboard;
@@ -54,6 +55,9 @@ namespace RTEventTimer
             
             // Don't override the initial XAML text unless timer is running
             // This allows custom initial messages in XAML
+            
+            // Set initial status text
+            UpdateStatusText();
         }
         
         private void ApplyDisplaySettings()
@@ -221,6 +225,7 @@ namespace RTEventTimer
                 {
                     // Starting fresh
                     remainingTime = new TimeSpan(0, countdownMinutes, countdownSeconds);
+                    hasFinished = false;  // Reset finished flag
                 }
                 
                 // Set end time based on remaining time
@@ -269,6 +274,7 @@ namespace RTEventTimer
         private void RestartTimer()
         {
             StopTimer();
+            hasFinished = false;  // Reset finished flag
             remainingTime = new TimeSpan(0, countdownMinutes, countdownSeconds);
             UpdateTimerDisplay(remainingTime);
             StartTimer();
@@ -277,6 +283,7 @@ namespace RTEventTimer
         private void TimerFinished()
         {
             TimerDisplay.Text = "00:00";
+            hasFinished = true;  // Mark timer as finished
             StatusText.Text = finishedText;
             
             // Play sound
@@ -297,11 +304,16 @@ namespace RTEventTimer
             {
                 StatusText.Text = activeText;
             }
-            else if (TimerDisplay.Text == "00:00")
+            else if (hasFinished)
             {
+                // Only show finished text if timer has actually completed
                 StatusText.Text = finishedText;
             }
-            // Otherwise, leave the text as set in XAML or by user
+            else
+            {
+                // Timer hasn't started or finished - show no text
+                StatusText.Text = "";
+            }
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
