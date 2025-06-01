@@ -8,6 +8,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace RTEventTimer
 {
@@ -30,6 +31,9 @@ namespace RTEventTimer
         private string finishedText;
         private int countdownMinutes;
         private int countdownSeconds;
+
+        private Point _startPoint;
+        private bool _isDragging;
 
         public MainWindow()
         {
@@ -318,12 +322,70 @@ namespace RTEventTimer
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            // Allow window dragging
+            // Custom drag implementation to avoid Windows snap behavior
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                DragMove();
+                _startPoint = e.GetPosition(null);
+                _isDragging = true;
+                this.CaptureMouse();
+                
+                // Hook mouse events for custom dragging
+                this.MouseMove += Window_MouseMove;
+                this.MouseLeftButtonUp += Window_MouseLeftButtonUp;
             }
         }
+
+        private void Window_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_isDragging && e.LeftButton == MouseButtonState.Pressed)
+            {
+                Point currentPoint = e.GetPosition(null);
+                
+                // Calculate the offset
+                double offsetX = currentPoint.X - _startPoint.X;
+                double offsetY = currentPoint.Y - _startPoint.Y;
+                
+                // Directly set window position without using DragMove
+                this.Left += offsetX;
+                this.Top += offsetY;
+            }
+        }
+
+        private void Window_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (_isDragging)
+            {
+                _isDragging = false;
+                this.ReleaseMouseCapture();
+                
+                // Unhook events
+                this.MouseMove -= Window_MouseMove;
+                this.MouseLeftButtonUp -= Window_MouseLeftButtonUp;
+            }
+        }
+
+        private void ResizeGrip_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // Allow window resizing from the custom grip
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                // Use Windows API to resize from bottom-right corner
+                try
+                {
+                    System.Windows.Interop.HwndSource hwndSource = PresentationSource.FromVisual((Visual)sender) as System.Windows.Interop.HwndSource;
+                    if (hwndSource != null)
+                    {
+                        // Send resize message to Windows
+                        SendMessage(hwndSource.Handle, 0x112, (IntPtr)0xF008, IntPtr.Zero);
+                    }
+                }
+                catch { }
+            }
+        }
+
+        // Windows API for resize functionality
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr SendMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {

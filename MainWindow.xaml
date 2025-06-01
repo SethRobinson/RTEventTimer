@@ -9,7 +9,7 @@
         ShowInTaskbar="True"
         WindowStartupLocation="CenterScreen"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
-        ResizeMode="CanResizeWithGrip"
+        ResizeMode="CanResize"
         Width="800"
         Height="450">
     
@@ -158,6 +158,30 @@
                         </TextBlock>
                     </StackPanel>
                 </Grid>
+            </Grid>
+            
+            <!-- Custom Resize Grip -->
+            <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="20" Height="20">
+                <!-- White lines with black outline for visibility on any background -->
+                <Path Name="ResizeGripWhite"
+                      Fill="Transparent"
+                      Stroke="White"
+                      StrokeThickness="2"
+                      Data="M 5,20 L 20,5 M 10,20 L 20,10 M 15,20 L 20,15"/>
+                <Path Name="ResizeGripBlack"
+                      Fill="Transparent"
+                      Stroke="Black"
+                      StrokeThickness="1"
+                      Data="M 5,20 L 20,5 M 10,20 L 20,10 M 15,20 L 20,15"
+                      Margin="0.5,0.5,0,0"/>
+                <!-- Transparent hit area for easy grabbing -->
+                <Rectangle Fill="Transparent"
+                          Cursor="SizeNWSE"
+                          MouseLeftButtonDown="ResizeGrip_MouseLeftButtonDown">
+                    <Rectangle.ToolTip>
+                        <ToolTip Content="Resize" />
+                    </Rectangle.ToolTip>
+                </Rectangle>
             </Grid>
         </Grid>
     </Viewbox>
