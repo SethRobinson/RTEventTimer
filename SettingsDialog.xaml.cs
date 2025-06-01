@@ -12,6 +12,14 @@ namespace RTEventTimer
         public bool IsTimerRunning { get; set; }
         public bool IsTimerPaused { get; set; }
         
+        // Display settings
+        public double ClockX { get; set; }
+        public double ClockY { get; set; }
+        public double ClockFontSize { get; set; }
+        public double TextX { get; set; }
+        public double TextY { get; set; }
+        public double TextFontSize { get; set; }
+        
         // Action to play button sound
         public Action? PlayButtonSound { get; set; }
         
@@ -39,6 +47,14 @@ namespace RTEventTimer
             SecondsTextBox.Text = CountdownSeconds.ToString();
             ActiveTextBox.Text = ActiveText;
             FinishedTextBox.Text = FinishedText;
+            
+            // Initialize display settings
+            ClockXTextBox.Text = ClockX.ToString();
+            ClockYTextBox.Text = ClockY.ToString();
+            ClockFontSizeTextBox.Text = ClockFontSize.ToString();
+            TextXTextBox.Text = TextX.ToString();
+            TextYTextBox.Text = TextY.ToString();
+            TextFontSizeTextBox.Text = TextFontSize.ToString();
             
             // Update button states based on timer state
             UpdateButtonStates();
@@ -172,12 +188,63 @@ namespace RTEventTimer
                     "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
+            
+            // Validate display settings
+            if (!double.TryParse(ClockXTextBox.Text, out double clockX))
+            {
+                MessageBox.Show("Please enter a valid number for Clock X position.", 
+                    "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            
+            if (!double.TryParse(ClockYTextBox.Text, out double clockY))
+            {
+                MessageBox.Show("Please enter a valid number for Clock Y position.", 
+                    "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            
+            if (!double.TryParse(ClockFontSizeTextBox.Text, out double clockFontSize) || clockFontSize <= 0)
+            {
+                MessageBox.Show("Please enter a valid font size for Clock (greater than 0).", 
+                    "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            
+            if (!double.TryParse(TextXTextBox.Text, out double textX))
+            {
+                MessageBox.Show("Please enter a valid number for Text X position.", 
+                    "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            
+            if (!double.TryParse(TextYTextBox.Text, out double textY))
+            {
+                MessageBox.Show("Please enter a valid number for Text Y position.", 
+                    "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            
+            if (!double.TryParse(TextFontSizeTextBox.Text, out double textFontSize) || textFontSize <= 0)
+            {
+                MessageBox.Show("Please enter a valid font size for Text (greater than 0).", 
+                    "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
 
             // Update properties
             CountdownMinutes = minutes;
             CountdownSeconds = seconds;
             ActiveText = string.IsNullOrWhiteSpace(ActiveTextBox.Text) ? TimerDefaults.ActiveTimerText : ActiveTextBox.Text;
             FinishedText = string.IsNullOrWhiteSpace(FinishedTextBox.Text) ? TimerDefaults.FinishedTimerText : FinishedTextBox.Text;
+            
+            // Update display properties
+            ClockX = clockX;
+            ClockY = clockY;
+            ClockFontSize = clockFontSize;
+            TextX = textX;
+            TextY = textY;
+            TextFontSize = textFontSize;
 
             return true;
         }

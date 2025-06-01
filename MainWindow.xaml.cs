@@ -3,6 +3,7 @@ using System.IO;
 using System.Media;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -21,16 +22,28 @@ namespace RTEventTimer
         private SoundPlayer buttonSoundPlayer;
         private Storyboard flashStoryboard;
         private SettingsDialog? settingsDialog;
+        private TimerConfig config;
         
-        // Settings - initialized from defaults
-        private string activeText = TimerDefaults.ActiveTimerText;
-        private string finishedText = TimerDefaults.FinishedTimerText;
-        private int countdownMinutes = TimerDefaults.DefaultMinutes;
-        private int countdownSeconds = TimerDefaults.DefaultSeconds;
+        // Settings - initialized from config file
+        private string activeText;
+        private string finishedText;
+        private int countdownMinutes;
+        private int countdownSeconds;
 
         public MainWindow()
         {
             InitializeComponent();
+            
+            // Load configuration
+            config = TimerConfig.Load();
+            activeText = config.ActiveText;
+            finishedText = config.FinishedText;
+            countdownMinutes = config.CountdownMinutes;
+            countdownSeconds = config.CountdownSeconds;
+            
+            // Apply display settings
+            ApplyDisplaySettings();
+            
             InitializeTimer();
             InitializeSoundPlayer();
             CreateFlashAnimation();
@@ -42,12 +55,46 @@ namespace RTEventTimer
             // Don't override the initial XAML text unless timer is running
             // This allows custom initial messages in XAML
         }
+        
+        private void ApplyDisplaySettings()
+        {
+            // Apply font sizes
+            TimerDisplay.FontSize = config.ClockFontSize;
+            StatusText.FontSize = config.TextFontSize;
+            
+            // Apply positions using transforms
+            TimerDisplay.RenderTransform = new TranslateTransform(config.ClockX, config.ClockY);
+            StatusText.RenderTransform = new TranslateTransform(config.TextX, config.TextY);
+        }
+
+        private static string GetProjectRootOrAppDirectory()
+        {
+            // First, check if we're running from the development environment
+            // by looking for the project file in parent directories
+            var currentDir = AppDomain.CurrentDomain.BaseDirectory;
+            var dir = new DirectoryInfo(currentDir);
+            
+            // Walk up the directory tree looking for the project file
+            while (dir != null)
+            {
+                if (File.Exists(Path.Combine(dir.FullName, "RTEventTimer.csproj")))
+                {
+                    // We found the project root
+                    return dir.FullName;
+                }
+                dir = dir.Parent;
+            }
+            
+            // If we didn't find the project file, we're probably running as a published executable
+            // Use the executable's directory
+            return AppDomain.CurrentDomain.BaseDirectory;
+        }
 
         private void LoadBackgroundImage()
         {
             try
             {
-                string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "background.png");
+                string imagePath = Path.Combine(GetProjectRootOrAppDirectory(), "Assets", "background.png");
                 
                 if (File.Exists(imagePath))
                 {
@@ -84,7 +131,7 @@ namespace RTEventTimer
             try
             {
                 // Load timer finished sound
-                string soundPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "timer_finished.wav");
+                string soundPath = Path.Combine(GetProjectRootOrAppDirectory(), "Assets", "timer_finished.wav");
                 if (File.Exists(soundPath))
                 {
                     soundPlayer = new SoundPlayer(soundPath);
@@ -96,7 +143,7 @@ namespace RTEventTimer
                 }
                 
                 // Load button click sound
-                string buttonSoundPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "button1.wav");
+                string buttonSoundPath = Path.Combine(GetProjectRootOrAppDirectory(), "Assets", "button1.wav");
                 if (File.Exists(buttonSoundPath))
                 {
                     buttonSoundPlayer = new SoundPlayer(buttonSoundPath);
@@ -159,9 +206,8 @@ namespace RTEventTimer
                 
             int minutes = (int)remaining.TotalMinutes;
             int seconds = remaining.Seconds;
-            int tenths = remaining.Milliseconds / 100;
             
-            TimerDisplay.Text = $"{minutes:00}:{seconds:00}.{tenths}";
+            TimerDisplay.Text = $"{minutes:00}:{seconds:00}";
         }
 
         private void StartTimer()
@@ -230,7 +276,7 @@ namespace RTEventTimer
 
         private void TimerFinished()
         {
-            TimerDisplay.Text = "00:00.0";
+            TimerDisplay.Text = "00:00";
             StatusText.Text = finishedText;
             
             // Play sound
@@ -251,7 +297,7 @@ namespace RTEventTimer
             {
                 StatusText.Text = activeText;
             }
-            else if (TimerDisplay.Text == "00:00.0")
+            else if (TimerDisplay.Text == "00:00")
             {
                 StatusText.Text = finishedText;
             }
@@ -286,6 +332,12 @@ namespace RTEventTimer
                 CountdownSeconds = countdownSeconds,
                 ActiveText = activeText,
                 FinishedText = finishedText,
+                ClockX = config.ClockX,
+                ClockY = config.ClockY,
+                ClockFontSize = config.ClockFontSize,
+                TextX = config.TextX,
+                TextY = config.TextY,
+                TextFontSize = config.TextFontSize,
                 IsTimerRunning = isRunning,
                 IsTimerPaused = isPaused,
                 PlayButtonSound = PlayButtonSound
@@ -334,6 +386,24 @@ namespace RTEventTimer
             countdownSeconds = settingsDialog.CountdownSeconds;
             activeText = settingsDialog.ActiveText;
             finishedText = settingsDialog.FinishedText;
+            
+            // Update config with new values
+            config.CountdownMinutes = countdownMinutes;
+            config.CountdownSeconds = countdownSeconds;
+            config.ActiveText = activeText;
+            config.FinishedText = finishedText;
+            config.ClockX = settingsDialog.ClockX;
+            config.ClockY = settingsDialog.ClockY;
+            config.ClockFontSize = settingsDialog.ClockFontSize;
+            config.TextX = settingsDialog.TextX;
+            config.TextY = settingsDialog.TextY;
+            config.TextFontSize = settingsDialog.TextFontSize;
+            
+            // Apply display settings immediately
+            ApplyDisplaySettings();
+            
+            // Save configuration to file
+            config.Save();
             
             // Update display text immediately if not running
             if (!isRunning)

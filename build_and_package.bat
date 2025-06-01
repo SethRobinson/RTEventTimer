@@ -83,6 +83,16 @@ echo.
 echo Copying Assets folder...
 xcopy /E /I /Y Assets %OUTPUT_DIR%\Assets
 
+:: Copy config.txt if it exists
+echo.
+echo Copying config.txt...
+if exist config.txt (
+    copy /Y config.txt %OUTPUT_DIR%\
+    echo config.txt copied.
+) else (
+    echo config.txt not found, skipping...
+)
+
 :: Package into ZIP
 echo.
 echo Creating ZIP package...

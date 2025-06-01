@@ -1,0 +1,16 @@
+# RT Event Timer Configuration
+# Timer Settings
+CountdownMinutes=0
+CountdownSeconds=4
+ActiveText=Round 1 in progress
+FinishedText=Time's Up!
+
+# Display Settings - Clock
+ClockX=0
+ClockY=-40
+ClockFontSize=260
+
+# Display Settings - Status Text
+TextX=100
+TextY=380
+TextFontSize=80
