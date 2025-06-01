@@ -18,6 +18,7 @@ namespace RTEventTimer
         private bool isRunning;
         private bool isPaused;
         private SoundPlayer soundPlayer;
+        private SoundPlayer buttonSoundPlayer;
         private Storyboard flashStoryboard;
         private SettingsDialog? settingsDialog;
         
@@ -33,12 +34,42 @@ namespace RTEventTimer
             InitializeTimer();
             InitializeSoundPlayer();
             CreateFlashAnimation();
+            LoadBackgroundImage();
             
             // Initialize display with default time
             UpdateTimerDisplay(new TimeSpan(0, countdownMinutes, countdownSeconds));
             
             // Don't override the initial XAML text unless timer is running
             // This allows custom initial messages in XAML
+        }
+
+        private void LoadBackgroundImage()
+        {
+            try
+            {
+                string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "background.png");
+                
+                if (File.Exists(imagePath))
+                {
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.UriSource = new Uri(imagePath, UriKind.Absolute);
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    
+                    BackgroundImage.Source = bitmap;
+                }
+                else
+                {
+                    // Log for debugging
+                    Console.WriteLine($"Background image not found at: {imagePath}");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the error but don't crash - the fallback background will show
+                Console.WriteLine($"Error loading background image: {ex.Message}");
+            }
         }
 
         private void InitializeTimer()
@@ -52,33 +83,43 @@ namespace RTEventTimer
         {
             try
             {
-                // Load sound from embedded resources
-                var assembly = Assembly.GetExecutingAssembly();
-                var resourceName = "RTEventTimer.Assets.timer_finished.wav";
-                
-                using (var resourceStream = assembly.GetManifestResourceStream(resourceName))
+                // Load timer finished sound
+                string soundPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "timer_finished.wav");
+                if (File.Exists(soundPath))
                 {
-                    if (resourceStream != null)
-                    {
-                        // Copy to memory stream since SoundPlayer needs a seekable stream
-                        // Don't dispose this stream - SoundPlayer needs it
-                        var memoryStream = new MemoryStream();
-                        resourceStream.CopyTo(memoryStream);
-                        memoryStream.Position = 0;
-                        
-                        soundPlayer = new SoundPlayer(memoryStream);
-                        soundPlayer.Load();
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Sound resource not found: {resourceName}");
-                    }
+                    soundPlayer = new SoundPlayer(soundPath);
+                    soundPlayer.Load();
+                }
+                else
+                {
+                    Console.WriteLine($"Timer finished sound not found: {soundPath}");
+                }
+                
+                // Load button click sound
+                string buttonSoundPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "button1.wav");
+                if (File.Exists(buttonSoundPath))
+                {
+                    buttonSoundPlayer = new SoundPlayer(buttonSoundPath);
+                    buttonSoundPlayer.Load();
+                }
+                else
+                {
+                    Console.WriteLine($"Button sound not found: {buttonSoundPath}");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading sound resource: {ex.Message}");
+                Console.WriteLine($"Error loading sound files: {ex.Message}");
             }
+        }
+
+        private void PlayButtonSound()
+        {
+            try
+            {
+                buttonSoundPlayer?.Play();
+            }
+            catch { }
         }
 
         private void CreateFlashAnimation()
@@ -228,6 +269,8 @@ namespace RTEventTimer
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
+            PlayButtonSound();
+            
             // If settings dialog is already open, just bring it to front
             if (settingsDialog != null && settingsDialog.IsLoaded)
             {
@@ -264,6 +307,8 @@ namespace RTEventTimer
         
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            PlayButtonSound();
+            
             // Close any open settings dialog
             settingsDialog?.Close();
             

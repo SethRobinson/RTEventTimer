@@ -1,0 +1,23 @@
+PLACEHOLDER FILE - Replace with actual button1.wav
+
+Please add a WAV audio file named "button1.wav" to this folder.
+This file will be played when buttons are clicked.
+
+Recommended specifications:
+- Format: WAV (Windows Wave)
+- Duration: Very short (under 200ms for best user experience)
+- Sample rate: 44.1 kHz or 48 kHz
+- Bit depth: 16-bit
+- Channels: Mono or Stereo
+
+Suggested sounds:
+- A subtle click or tap sound
+- A soft beep or chime
+- Any short UI feedback sound
+
+You can find free button sounds at:
+- freesound.org
+- zapsplat.com  
+- Windows system sounds (C:\Windows\Media\)
+
+Once you have the actual WAV file, delete this .txt file and place button1.wav here. 

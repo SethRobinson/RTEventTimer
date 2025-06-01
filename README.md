@@ -11,15 +11,25 @@ A modern, always-on-top countdown timer application for Windows with transparent
 - **Timer Controls**: Start, Stop, Pause, and Restart functionality
 - **Audio Alert**: Plays sound when timer reaches zero
 - **Visual Alert**: Flashing animation when timer completes
-- **Single File Deployment**: All resources embedded in one executable
+- **Single File Deployment**: Executable with external assets folder
+- **Customizable Assets**: Easily replace sounds and background image
 
 
 ## Quick Start (For End Users)
 
 1. Download `RTEventTimer_v1.0.0.zip`
-2. Extract the ZIP file
+2. Extract the ZIP file to a folder
 3. Double-click `RTEventTimer.exe` to run
 4. No installation required!
+
+### Customizing Appearance and Sounds
+
+The Assets folder contains files you can replace:
+- `background.png` - Timer background (1920x270 pixels with transparency)
+- `timer_finished.wav` - Sound when timer reaches zero
+- `button1.wav` - Sound when buttons are clicked
+
+Simply replace these files with your own (keeping the same filenames) to customize the timer.
 
 ## Usage
 
@@ -56,6 +66,10 @@ Before building, add these files to the `Assets` folder:
 
 3. **icon.ico**: Application icon (multi-resolution)
    - Should contain 16x16, 32x32, 48x48, and 256x256 sizes
+
+4. **button1.wav**: Button click sound
+   - Short duration (under 200ms recommended)
+   - Any WAV format
 
 ### Build Instructions
 

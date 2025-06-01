@@ -73,13 +73,20 @@ echo - Click and drag anywhere to move the timer >> %OUTPUT_DIR%\README.txt
 echo - Click the gear icon to open settings >> %OUTPUT_DIR%\README.txt
 echo - Click the X button to close >> %OUTPUT_DIR%\README.txt
 echo. >> %OUTPUT_DIR%\README.txt
-echo Note: The timer includes default background and sound. >> %OUTPUT_DIR%\README.txt
-echo To customize, replace the embedded resources and rebuild. >> %OUTPUT_DIR%\README.txt
+echo Note: You can customize the sounds and background by replacing files in the Assets folder: >> %OUTPUT_DIR%\README.txt
+echo - background.png: Timer background image (1920x270 pixels with transparency) >> %OUTPUT_DIR%\README.txt
+echo - timer_finished.wav: Sound that plays when timer reaches zero >> %OUTPUT_DIR%\README.txt
+echo - button1.wav: Sound that plays when buttons are clicked >> %OUTPUT_DIR%\README.txt
+
+:: Copy Assets folder
+echo.
+echo Copying Assets folder...
+xcopy /E /I /Y Assets %OUTPUT_DIR%\Assets
 
 :: Package into ZIP
 echo.
 echo Creating ZIP package...
-%RT_PROJECTS%\proton\shared\win\utils\7za.exe a -tzip %ZIP_NAME% .\%OUTPUT_DIR%\*
+%RT_PROJECTS%\proton\shared\win\utils\7za.exe a -tzip %ZIP_NAME% .\%OUTPUT_DIR%\* -r
 
 if %ERRORLEVEL% neq 0 (
     echo.

@@ -32,8 +32,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Embed assets as resources instead of copying to output -->
-    <Resource Include="Assets\**\*" />
+    <!-- Copy assets to output directory -->
+    <None Update="Assets\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project> 
