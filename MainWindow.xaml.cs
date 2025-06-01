@@ -287,7 +287,8 @@ namespace RTEventTimer
                 ActiveText = activeText,
                 FinishedText = finishedText,
                 IsTimerRunning = isRunning,
-                IsTimerPaused = isPaused
+                IsTimerPaused = isPaused,
+                PlayButtonSound = PlayButtonSound
             };
             
             // Subscribe to settings changed event
@@ -314,6 +315,14 @@ namespace RTEventTimer
             
             // Close the main application
             Application.Current.Shutdown();
+        }
+        
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            PlayButtonSound();
+            
+            // Minimize the window to taskbar
+            WindowState = WindowState.Minimized;
         }
         
         private void OnSettingsChanged(object? sender, SettingsChangedEventArgs e)

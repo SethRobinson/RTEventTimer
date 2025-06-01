@@ -12,6 +12,9 @@ namespace RTEventTimer
         public bool IsTimerRunning { get; set; }
         public bool IsTimerPaused { get; set; }
         
+        // Action to play button sound
+        public Action? PlayButtonSound { get; set; }
+        
         // Event to notify main window of changes
         public event EventHandler<SettingsChangedEventArgs>? SettingsChanged;
 
@@ -76,6 +79,8 @@ namespace RTEventTimer
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
+            PlayButtonSound?.Invoke();
+            
             if (IsTimerPaused)
             {
                 // Resume timer
@@ -110,6 +115,7 @@ namespace RTEventTimer
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
+            PlayButtonSound?.Invoke();
             SettingsChanged?.Invoke(this, new SettingsChangedEventArgs(TimerAction.Stop));
             IsTimerRunning = false;
             IsTimerPaused = false;
@@ -118,6 +124,7 @@ namespace RTEventTimer
 
         private void RestartButton_Click(object sender, RoutedEventArgs e)
         {
+            PlayButtonSound?.Invoke();
             if (ValidateAndUpdateSettings())
             {
                 SettingsChanged?.Invoke(this, new SettingsChangedEventArgs(TimerAction.Restart));
@@ -129,6 +136,7 @@ namespace RTEventTimer
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
+            PlayButtonSound?.Invoke();
             if (ValidateAndUpdateSettings())
             {
                 SettingsChanged?.Invoke(this, new SettingsChangedEventArgs(TimerAction.None));
@@ -137,6 +145,7 @@ namespace RTEventTimer
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            PlayButtonSound?.Invoke();
             Close();
         }
 
