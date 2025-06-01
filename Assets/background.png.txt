@@ -1,0 +1,21 @@
+PLACEHOLDER FILE - Replace with actual background.png
+
+Please add a transparent PNG image named "background.png" to this folder.
+
+Requirements:
+- Recommended size: 1920x270 pixels (or your screen width x 270)
+- Format: PNG with alpha channel (transparency)
+- Design: Semi-transparent background with clear center area for timer display
+
+The transparent areas of the PNG will allow the desktop to show through.
+
+You can create this in any image editor that supports transparency:
+- Photoshop
+- GIMP (free)
+- Paint.NET (free)
+- Or any online PNG editor
+
+Quick method:
+1. Create new image 1920x270
+2. Fill with black at 70% opacity
+3. Save as PNG with transparency 

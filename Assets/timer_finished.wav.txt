@@ -1,0 +1,21 @@
+PLACEHOLDER FILE - Replace with actual timer_finished.wav
+
+Please add a WAV audio file named "timer_finished.wav" to this folder.
+
+This sound will play when the timer reaches zero.
+
+Requirements:
+- Format: WAV (Windows Wave)
+- Duration: Recommended 1-3 seconds
+- Content: Any alert sound (beep, chime, bell, etc.)
+
+Where to find sounds:
+- Windows system sounds: C:\Windows\Media\
+- Free sound websites:
+  - freesound.org
+  - zapsplat.com
+  - soundbible.com
+- Create your own with Audacity (free audio editor)
+
+Quick option:
+Copy any .wav file from C:\Windows\Media\ and rename it to timer_finished.wav 
