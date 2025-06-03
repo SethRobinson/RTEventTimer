@@ -1,5 +1,7 @@
 using System;
 using System.Windows;
+using System.Windows.Media;
+using System.IO;
 
 namespace RTEventTimer
 {
@@ -173,6 +175,41 @@ namespace RTEventTimer
             }
             
             Close();
+        }
+
+        private void Welcome1Button_Click(object sender, RoutedEventArgs e)
+        {
+            PlaySoundFile("start1_sfx.wav");
+        }
+
+        private void Welcome2Button_Click(object sender, RoutedEventArgs e)
+        {
+            PlaySoundFile("start2_sfx.wav");
+        }
+
+        private void PlaySoundFile(string fileName)
+        {
+            try
+            {
+                string soundPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", fileName);
+                
+                if (File.Exists(soundPath))
+                {
+                    MediaPlayer player = new MediaPlayer();
+                    player.Open(new Uri(soundPath, UriKind.Absolute));
+                    player.Play();
+                }
+                else
+                {
+                    MessageBox.Show($"Sound file not found: {fileName}", "Audio Error", 
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error playing sound: {ex.Message}", "Audio Error", 
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private bool ValidateAndUpdateSettings()

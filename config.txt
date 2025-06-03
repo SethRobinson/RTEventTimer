@@ -1,7 +1,7 @@
 # RT Event Timer Configuration
 # Timer Settings
-CountdownMinutes=0
-CountdownSeconds=4
+CountdownMinutes=90
+CountdownSeconds=0
 ActiveText=Round 1 in progress
 FinishedText=Time's up, finish the hand!
 
